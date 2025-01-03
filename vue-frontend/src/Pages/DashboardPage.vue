@@ -1,3 +1,7 @@
 <template>
-    Dashboard Page
+    Dashboard Page 
 </template>
+
+<script>
+
+</script>
