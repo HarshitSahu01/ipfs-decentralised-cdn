@@ -1,19 +1,11 @@
 <template>
-    Hello World {{ age }} {{ color }}
+    Hello World {{ age }} 
 </template>
 
 <script>
 export default {
-    name: 'Test',
-    data() {
-        return {
-            age: 18
-        }
-    },
-    computed(){
-        return {
-            color: 'pink'
-        }
+    computed:{
+    
     }
 }
 </script>
