@@ -1,106 +1,47 @@
 <template>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <p class="text-2xl font-semibold text-gray-800 mx-8 pt-8 pb-4">
+        Your files
+    </p>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg md:mx-8">
         <table class="w-full text-sm text-left rtl:text-right text-gray-700">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+            <thead class="text-xs text-gray-700 uppercase bg-orange-100">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Product name
+                        Sno
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Color
+                        File Name
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Category
+                        File Size
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Price
+                        Status
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Action
+                        Get Link
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Delete
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                <tr class="odd:bg-white even:bg-orange-50 border-b border-gray-200" v-for="file in files" :key="file.id">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Apple MacBook Pro 17"
+                        {{ file.id }}
                     </th>
                     <td class="px-6 py-4">
-                        Silver
+                        {{ file.name }}
                     </td>
                     <td class="px-6 py-4">
-                        Laptop
+                        {{ file.size }}
                     </td>
                     <td class="px-6 py-4">
-                        $2999
+                        {{ file.status }}
                     </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Microsoft Surface Pro
-                    </th>
-                    <td class="px-6 py-4">
-                        White
-                    </td>
-                    <td class="px-6 py-4">
-                        Laptop PC
-                    </td>
-                    <td class="px-6 py-4">
-                        $1999
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Magic Mouse 2
-                    </th>
-                    <td class="px-6 py-4">
-                        Black
-                    </td>
-                    <td class="px-6 py-4">
-                        Accessories
-                    </td>
-                    <td class="px-6 py-4">
-                        $99
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Google Pixel Phone
-                    </th>
-                    <td class="px-6 py-4">
-                        Gray
-                    </td>
-                    <td class="px-6 py-4">
-                        Phone
-                    </td>
-                    <td class="px-6 py-4">
-                        $799
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Apple Watch 5
-                    </th>
-                    <td class="px-6 py-4">
-                        Red
-                    </td>
-                    <td class="px-6 py-4">
-                        Wearables
-                    </td>
-                    <td class="px-6 py-4">
-                        $999
+                    <td class="px-6 py-4 text-blue-500 hover:cursor-pointer">
+                        Copy
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
@@ -115,6 +56,36 @@
 <script>
 export default {
     name: 'DashboardPage',
+    setup(){
+        return {
+            files: [
+                {
+                    id: 1,
+                    name: 'jquery.min.js',
+                    size: '234kB',
+                    status: 'Public'
+                },
+                {
+                    id: 2,
+                    name: 'bootstrap.min.js',
+                    size: '234kB',
+                    status: 'Private'
+                },
+                {
+                    id: 3,
+                    name: 'vue.min.js',
+                    size: '234kB',
+                    status: 'Public'
+                },
+                {
+                    id: 4,
+                    name: 'react.min.js',
+                    size: '234kB',
+                    status: 'Private'
+                }
+            ]
+        }
+    }
 };
 </script>
 
