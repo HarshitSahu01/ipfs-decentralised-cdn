@@ -1,5 +1,7 @@
 <template>
-    Hello World {{ age }} {{ color }}
+    <p class="bg-red-400">
+        Hello World
+    </p>
 </template>
 
 <script>
