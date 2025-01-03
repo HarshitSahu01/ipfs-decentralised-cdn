@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex items-center sticky top-0 justify-between px-6 py-4 bg-white shadow-md">
+  <nav class="flex items-center sticky top-0 z-50 justify-between px-6 py-4 bg-white shadow-md">
     <!-- Logo Section -->
     <div class="flex items-center space-x-3">
       <img src="../assets/folder-svgrepo-com.svg" alt="logo" />
