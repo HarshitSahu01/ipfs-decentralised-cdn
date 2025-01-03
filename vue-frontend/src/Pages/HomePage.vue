@@ -3,8 +3,6 @@
 </script>
 
 <template>
-  <main>
-    <Test />
-  </main>
+  Home Page
 </template>
 

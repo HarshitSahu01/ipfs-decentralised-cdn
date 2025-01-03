@@ -7,7 +7,6 @@ import './assets/main.css'
 <template>
   <Navbar />
   <RouterView />
-  <p class="bg-red-400">lalalal</p>
 </template>
 
 <style scoped>
