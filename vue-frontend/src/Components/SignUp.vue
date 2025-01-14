@@ -1,3 +1,10 @@
+    <script>
+    import WalletLogin from '../Components/WalletLogin.vue';
+    
+    export default {
+        name: 'SignUp'
+    }
+    </script>
 <template>
     <h1>Sign Up</h1>
     <div class="signup">
@@ -9,13 +16,9 @@
             <router-link to="/login">Login</router-link>
         </p>
     </div>
+    <WalletLogin/>
 </template>
 
-<script>
-export default {
-    name: 'SignUp'
-}
-</script>
 
 <style scoped>
     h1 {

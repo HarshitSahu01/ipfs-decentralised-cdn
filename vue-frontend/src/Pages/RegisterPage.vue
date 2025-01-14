@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import SignUp from '../Components/SignUp.vue';
+
+</script>
+
 <template>
-    Register page
+    <SignUp/>
 </template>
