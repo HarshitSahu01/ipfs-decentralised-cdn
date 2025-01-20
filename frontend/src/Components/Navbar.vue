@@ -13,9 +13,13 @@
       <template v-if="isLoggedIn">
         <RouterLink to="/dashboard" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Dashboard
         </RouterLink>
-        <button @click="logout" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
+        <button class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
       </template>
-      <button v-else @click="login" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Login</button>
+      <button v-else class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">
+        <RouterLink to="/register">
+        Login
+        </RouterLink>
+      </button>
     </div>
   </nav>
 </template>
