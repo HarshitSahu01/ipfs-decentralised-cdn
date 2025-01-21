@@ -12,7 +12,7 @@ const pinia = createPinia();
 app.use(pinia);
  
 app.use(vue3GoogleLogin, {
-  clientId: '308263909394-jrvumsna2qssf93545jfa8d92gkqjucf.apps.googleusercontent.com'
+  clientId: '95257542474-g5rcjabfkbrvlul3ls6n51p37eu8ksjn.apps.googleusercontent.com'
 })
 
 app.use(router)
