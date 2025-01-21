@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from './auth.js';
+import fileManagerRoutes from "./fileManager.js";
 
 import { getAuth } from "firebase/auth";
 const auth = getAuth();
@@ -11,6 +12,7 @@ const app = express();
 app.use(cors({credentials: true, origin: 'http://localhost:5173'}));
 app.use(express.json());
 
+app.use('/', fileManagerRoutes);
 app.use('/', authRoutes);
 
 app.get("/", (req, res) => {
