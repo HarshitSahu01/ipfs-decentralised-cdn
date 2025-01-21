@@ -10,6 +10,7 @@
 
     <!-- Navigation Links -->
     <div class="flex items-center space-x-4">
+      {{ loginState.isLoggedIn }}
       <template v-if="isLoggedIn">
         <RouterLink to="/dashboard" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Dashboard
         </RouterLink>
@@ -26,11 +27,16 @@
 
 <script>
 import { RouterLink } from 'vue-router';
+import { useLoginState } from '../stores/loginState';
+
+// const loginState = useLoginState();
+
 export default {
   name: "NavbarComponent",
   data() {
     return {
       isLoggedIn: false,
+      loginState: useLoginState()
     };
   },
   methods: {

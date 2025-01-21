@@ -11,7 +11,6 @@ router.post("/api/login", (req, res) => {
   signInWithCredential(auth, credential)
   .then(data => console.log(`user logged in ${auth.currentUser.uid}`))
   .catch((error) => {
-    
     const errorCode = error.code;
     const errorMessage = error.message; 
     const email = error.customData.email;
