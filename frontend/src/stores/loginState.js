@@ -14,12 +14,14 @@ export const useLoginState = defineStore('loginState', {
             this.displayName = '';
             this.email = '';
             this.displayPhoto = '';
+            this.credential = '';
         },
-        login(userData) {
+        login(userData, credential) {
             this.isLoggedIn = true;
-            this.displayName = userData.name;
+            this.displayName = userData.displayName;
             this.email = userData.email;
-            this.picture = userData.picture;
+            this.picture = userData.photoURL;
+            this.credential = credential;
         }
     }
 })
