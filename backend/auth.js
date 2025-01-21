@@ -1,25 +1,38 @@
 import express from 'express'
-import {getAuth} from 'firebase-admin/auth'
 import {db} from './firebase.js'
+import {getAuth} from 'firebase-admin/auth'
 const router = express.Router()
+
+import dotenv from 'dotenv'
+dotenv.config()
 
 const auth = getAuth()
 
 export const verifyGoogleToken = async (req, res) => {
-  const credential = req.body.credential;
+  const { credential } = req.body;
 
   try {
-    const decodedToken = await auth.verifyIdToken(credential);
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+    const data = await response.json();
+
+    if (data.error) {
+      throw new Error('Invalid token');
+    }
+
+    const clientId = process.env.OAUTH_CLIENT_ID;
+    if (data.aud !== clientId) {
+      throw new Error('Token audience mismatch');
+    }
 
     let firebaseUser;
     try {
-      firebaseUser = await auth.getUser(decodedToken.uid);
+      firebaseUser = await auth.getUser(data.sub);
     } catch (error) {
       firebaseUser = await auth.createUser({
-        uid: decodedToken.uid,
-        email: decodedToken.email,
-        displayName: decodedToken.name,
-        photoURL: decodedToken.picture,
+        uid: data.sub,
+        email: data.email,
+        displayName: data.name,
+        photoURL: data.picture,
       });
 
       await db.collection('users').doc(firebaseUser.uid).set({
@@ -30,24 +43,22 @@ export const verifyGoogleToken = async (req, res) => {
           picture: firebaseUser.photoURL,
           email: firebaseUser.email,
           lastLogin: new Date(),
-        }
+        },
+        files: []
       });
     }
 
-    // Send response back
-    // res.status(200).send({ message: 'User authenticated and saved successfully', user: firebaseUser });
     return firebaseUser;
-
   } catch (error) {
-    console.error('Invalid token', error);
-    throw new Error('Invalid token')
+    console.error('Error verifying token:', error);
+    throw new Error('Invalid token' );
   }
 };
 
 router.post('/api/login', (req, res) => {
   verifyGoogleToken(req, res)
   .then(user => {
-    res.status(200).send({ message: 'User authenticated and saved successfully' });
+    res.status(200).send({ message: 'User authenticated and saved successfully', user: user});
   })
   .catch(error => {
     res.status(401).send({ message: 'Invalid token' });
