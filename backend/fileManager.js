@@ -28,8 +28,8 @@ async function upload() {
 
 // upload() 
 
-router.post("/api/testUpload", (req, res) => {
-    
+// router.post("/api/testUpload", (req, res) => {
+
 
 router.post("/api/storefile", (req, res) => {
     res.send("Hello World")
