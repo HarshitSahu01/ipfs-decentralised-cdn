@@ -3,6 +3,7 @@ import HomePage from '../Pages/HomePage.vue'
 import LoginPage from '../Pages/LoginPage.vue'
 import DashboardPage from '../Pages/DashboardPage.vue'
 import RegisterPage from '../Pages/RegisterPage.vue'
+import TestUploadPage from '../Pages/TestUploadPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,11 @@ const router = createRouter({
       name: 'dashbaord',
       component: DashboardPage
     },
+    {
+      path: '/upload',
+      name: 'upload',
+      component: TestUploadPage
+    }
     // {
     //   path: '/about',
     //   name: 'about',
