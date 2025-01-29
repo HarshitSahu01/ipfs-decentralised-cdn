@@ -5,7 +5,8 @@ export const useLoginState = defineStore('loginState', {
         isLoggedIn: false,
         displayName: '',
         email: '',
-        picture: ''
+        picture: '',
+        credential: ''
     }),
 
     actions: {

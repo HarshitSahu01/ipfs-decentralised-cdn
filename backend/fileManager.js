@@ -28,6 +28,9 @@ async function upload() {
 
 // upload() 
 
+router.post("/api/testUpload", (req, res) => {
+    
+
 router.post("/api/storefile", (req, res) => {
     res.send("Hello World")
 });
@@ -38,4 +41,15 @@ export default router;
 getFiles
 storeFile
 deleteFile
+
+/api/testUpload
+params: credentials, file
+file -> name, File()
+res -> 200 file uploaded successfully
+res -> 400 file upload failed
+
+/testUpload
+upload fiile type = "file/upload"
+<form action="/api/testUpload" method="post" enctype="multipart/form-data">
+
 */

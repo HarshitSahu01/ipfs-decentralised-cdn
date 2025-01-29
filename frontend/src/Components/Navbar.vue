@@ -10,11 +10,11 @@
 
     <!-- Navigation Links -->
     <div class="flex items-center space-x-4">
-      {{ loginState.isLoggedIn }}
       <template v-if="isLoggedIn">
+      {{ loginState.displayName }}
         <RouterLink to="/dashboard" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Dashboard
         </RouterLink>
-        <button class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
+        <button @click="logout" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
       </template>
       <button v-else class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">
         <RouterLink to="/register">
@@ -40,11 +40,8 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.isLoggedIn = true;
-    },
     logout() {
-      this.isLoggedIn = false;
+      this.loginState.logout();
     },
   },
 };
