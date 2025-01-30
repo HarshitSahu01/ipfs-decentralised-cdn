@@ -32,7 +32,7 @@ const pinata = new PinataSDK({
 
 // upload() 
 
-router.post("/api/testUpload", upload.single('file'), async (req, res) => {
+router.post("/api/uploadFile", upload.single('file'), async (req, res) => {
     let firebaseUser;
     try {
         firebaseUser = await verifyGoogleToken(req, res);
@@ -41,7 +41,7 @@ router.post("/api/testUpload", upload.single('file'), async (req, res) => {
     }
 
     if (!req.file) {
-        return res.status(400).send('No file uploaded.');
+        res.status(400).send('No file uploaded.');
     }
 
     try {
@@ -77,8 +77,34 @@ router.post("/api/testUpload", upload.single('file'), async (req, res) => {
 });
 
 
-router.post("/api/storefile", (req, res) => {
-    res.send("Hello World")
+router.post("/api/deleteFile", async (req, res) => {
+    let firebaseUser;
+    try {
+        firebaseUser = await verifyGoogleToken(req, res);
+    } catch (error) {
+        res.status(403).send({ msg: "Invalid Token", error: error })
+    }
+
+    const {fileRefParam} = req.body
+    const fileRef = db.collection("files").doc(fileRefParam)
+
+    //check if file exists
+    //ipfs then files then user delete
+
+    if(!fileRef){
+        res.status(400).send("No such file exists.")
+    }
+
+    try {
+        const unpin = await pinata.unpin([fileRef.hash])
+
+        await fileRef.delete();
+
+
+        
+    } catch (error){
+        res.status(400).send({msg:'Error in deleting', error: error} )
+    }
 });
 
 export default router;
