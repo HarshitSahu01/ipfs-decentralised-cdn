@@ -16,11 +16,11 @@
         </RouterLink>
         <button @click="logout" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
       </template>
-      <button v-else class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">
-        <RouterLink to="/register">
+        <RouterLink v-else to="/register">
+      <button class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">
         Login
-        </RouterLink>
       </button>
+        </RouterLink>
     </div>
   </nav>
 </template>
@@ -28,6 +28,7 @@
 <script>
 import { RouterLink } from 'vue-router';
 import { useLoginState } from '../stores/loginStateStore';
+import { useRouter } from 'vue-router';
 
 // const loginState = useLoginState();
 
@@ -35,12 +36,14 @@ export default {
   name: "NavbarComponent",
   data() {
     return {
-      loginState: useLoginState()
+      loginState: useLoginState(),
+      router: useRouter()
     };
   },
   methods: {
     logout() {
       this.loginState.logout();
+      this.router.push({ name: 'home' });
     },
   },
 };

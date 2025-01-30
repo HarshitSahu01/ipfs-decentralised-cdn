@@ -2,11 +2,15 @@
 import { useLoginState } from '../stores/loginStateStore';
 import axios from 'axios';
 import { decodeCredential } from 'vue3-google-login';
+import { useRouter } from 'vue-router';
+
+// const router = useRouter();
 
 export default {
   data() {
     return {
       loginState: useLoginState(),
+      router: useRouter()
     };
   },
   computed: {
@@ -24,9 +28,8 @@ export default {
         })
         .then((response) => response.data)
         .then((data) => {
-          // console.log('Login successful');
           this.loginState.login(data.user, response.credential); 
-          router.push({ name: 'Dashboard' });
+          this.router.push({ name: 'dashboard' });
         })
         .catch((error) => console.log(error));
     },
