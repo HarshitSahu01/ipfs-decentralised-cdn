@@ -57,7 +57,7 @@
     const formData = new FormData();
     formData.append('file', selectedFile.value);
     try {
-      await fetch('/api/testUpload', {
+      await fetch('http://localhost:5000/api/testUpload', {
         method: 'POST',
         body: formData,
       });
