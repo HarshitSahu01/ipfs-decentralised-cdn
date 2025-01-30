@@ -2,6 +2,10 @@ import express from 'express'
 import multer from 'multer'
 const router = express.Router();
 
+import { db } from "./firebase.js"
+
+import { verifyGoogleToken } from "./auth.js"
+
 import fs from "fs";
 import { PinataSDK } from "pinata-web3";
 import dotenv from "dotenv";
@@ -29,6 +33,13 @@ const pinata = new PinataSDK({
 // upload() 
 
 router.post("/api/testUpload", upload.single('file'), async (req, res) => {
+    let firebaseUser;
+    try {
+        firebaseUser = await verifyGoogleToken(req, res);
+    } catch (error) {
+        res.status(403).send({ msg: "Invalid Token", error: error })
+    }
+
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
@@ -42,6 +53,22 @@ router.post("/api/testUpload", upload.single('file'), async (req, res) => {
 
         const file = new File([fileBuffer], fileName, { type: fileMimeType });
         const upload = await pinata.upload.file(file);
+
+        const userRef = db.collection("users").doc(firebaseUser.UID)
+
+        const fileRef = db.collection("files").add({
+            name: file.name,
+            size: file.size,
+            type: file.mimetype,
+            hash: upload.IpfsHash,
+            pinsize: upload.PinSize,
+            timestamp: new Date().toISOString(),
+            user: userRef
+        })
+
+        await userRef.update({
+            files: admin.firestore.FieldValue.arrayUnion(fileRef),
+        });
 
         res.status(200).send({ msg: 'File uploaded successfully', data: upload });
     } catch (error) {

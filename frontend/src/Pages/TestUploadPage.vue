@@ -39,6 +39,7 @@
   <script setup>
   import { ref } from 'vue';
   import axios from 'axios';
+  import { useLoginState } from '../stores/loginState';
 
   const files = ref([
     { name: 'jquery.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
@@ -46,6 +47,8 @@
     { name: 'vue.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
     { name: 'react.min.js', size: '234kB', status: 'Private', link: '#', editable: true }
   ]);
+
+  const loginState = useLoginState()
 
   const selectedFile = ref(null);
 
@@ -58,7 +61,10 @@
     const formData = new FormData();
     formData.append('file', selectedFile.value);
     try {
-      const response = await axios.post('http://localhost:5000/api/testUpload', formData);
+      const response = await axios.post('http://localhost:5000/api/testUpload', {
+        formData,
+        credential: loginState.credential
+      });
       alert('File uploaded successfully');
       console.log(response)
     } catch (error) {
