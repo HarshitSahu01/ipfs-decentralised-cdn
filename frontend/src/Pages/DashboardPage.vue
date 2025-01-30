@@ -26,7 +26,7 @@
             </label>
         </div>
         <div class="flex items-center justify-center gap-6 mb-2">
-            <button @click="redirectToUpload">
+            <button @click="uploadFile">
                 Upload file!
             </button>
         </div>
@@ -86,6 +86,7 @@
 
 <script>
 import { ref } from 'vue';
+import axios from 'axios';
 
 export default {
     name: 'DashboardPage',
@@ -117,21 +118,44 @@ export default {
                     status: 'Private'
                 }
             ],
-            uploadFieldFileName: ref("")
+            uploadFieldFileName: ref(""),
+            selectedFile: ref(null)
         }
     },
     methods: {
         redirectToUpload() {
             this.$router.push({ path: '/TestUploadPage' });
         },
+        async uploadFile(){
+            if(this.selectedFile){
+                const formData = new FormData();
+                formData.append('file', this.selectedFile);
+                try {
+                    const response = await axios.post('http://localhost:5000/api/testupload', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+
+                    
+                    console.log('File uploaded successfully:', response.data);
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                }
+            } else {
+                console.log('No file selected!');
+            }
+        },
         updateFileName(event) {
-            const file = event.target.files[0]; // Get the first selected file
+            const file = event.target.files[0];
             if (file) {
-                this.uploadFieldFileName = file.name; // Store the file name
-            } else{
-                this.uploadFieldFileName = ""
-            } 
-            console.log(this.uploadFieldFileName)
+                this.selectedFile = file; // Store the selected file
+                this.uploadFieldFileName = file.name; // Store the filename
+            } else {
+                this.uploadFieldFileName = "";
+                this.selectedFile = null; // Clear selected file
+            }
+            console.log('Selected file:', this.uploadFieldFileName);
         }
     }
 };
