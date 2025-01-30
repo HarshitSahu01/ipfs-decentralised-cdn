@@ -26,10 +26,10 @@ export const verifyGoogleToken = async (req, res) => {
 
     let firebaseUser;
     try {
-      firebaseUser = await auth.getUser(data.sub);
+      firebaseUser = await auth.getUser(data.jti);
     } catch (error) {
       firebaseUser = await auth.createUser({
-        uid: data.sub,
+        uid: data.jti,
         email: data.email,
         displayName: data.name,
         photoURL: data.picture,
@@ -51,7 +51,7 @@ export const verifyGoogleToken = async (req, res) => {
     return firebaseUser;
   } catch (error) {
     console.error('Error verifying token:', error);
-    throw new Error('Invalid token' );
+    throw new Error('Invalid token');
   }
 };
 
