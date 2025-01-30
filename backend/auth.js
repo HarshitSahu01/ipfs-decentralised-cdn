@@ -2,6 +2,7 @@ import express from 'express'
 import {db} from './firebase.js'
 import {getAuth} from 'firebase-admin/auth'
 const router = express.Router()
+import fs from 'fs'
 
 import dotenv from 'dotenv'
 dotenv.config()
@@ -26,8 +27,9 @@ export const verifyGoogleToken = async (req, res) => {
 
     let firebaseUser;
     try {
-      firebaseUser = await auth.getUser(data.jti);
+      firebaseUser = await auth.getUserByEmail(data.email);
     } catch (error) {
+      fs.appendFileSync('error.log', `${error}\n`, 'utf8');
       firebaseUser = await auth.createUser({
         uid: data.jti,
         email: data.email,

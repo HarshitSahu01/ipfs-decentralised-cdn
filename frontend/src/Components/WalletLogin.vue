@@ -1,5 +1,5 @@
 <script>
-import { useLoginState } from '../stores/loginState';
+import { useLoginState } from '../stores/loginStateStore';
 import axios from 'axios';
 import { decodeCredential } from 'vue3-google-login';
 
@@ -17,16 +17,16 @@ export default {
   methods: {
     callback(response) {
       const userData = decodeCredential(response.credential);
-      console.log(userData);
+      // console.log(userData);
 
-      axios
-        .post('http://localhost:5000/api/login', {
+      axios.post('http://localhost:5000/api/login', {
           credential: response.credential,
         })
         .then((response) => response.data)
         .then((data) => {
-          console.log('Login successful');
-          this.loginState.login(data.user, response.credential); // Assuming the 'login' method exists in store
+          // console.log('Login successful');
+          this.loginState.login(data.user, response.credential); 
+          router.push({ name: 'Dashboard' });
         })
         .catch((error) => console.log(error));
     },

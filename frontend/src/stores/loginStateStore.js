@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+// import router from 'vue'
 
 export const useLoginState = defineStore('loginState', {
     state: () => ({
@@ -16,6 +17,7 @@ export const useLoginState = defineStore('loginState', {
             this.email = '';
             this.displayPhoto = '';
             this.credential = '';
+            router.push({ name: 'home' });
         },
         login(userData, credential) {
             this.isLoggedIn = true;
@@ -23,6 +25,7 @@ export const useLoginState = defineStore('loginState', {
             this.email = userData.email;
             this.picture = userData.photoURL;
             this.credential = credential;
+            router.push({name: 'dashboard'});
         }
     }
 })
