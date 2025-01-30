@@ -38,17 +38,12 @@ router.post("/api/testUpload", upload.single('file'), async (req, res) => {
         const fileName = req.file.originalname;
         const fileMimeType = req.file.mimetype;
 
-        // Pinata upload expects a readable stream or a buffer, no need to use File API
-        const uploadResult = await pinata.pinFileToIPFS(fileBuffer, {
-            pinataMetadata: {
-                name: fileName
-            },
-            pinataOptions: {
-                cidVersion: 0
-            }
-        });
+        console.log(fileName, fileMimeType);
 
-        res.status(200).send({ msg: 'File uploaded successfully', data: uploadResult });
+        const file = new File([fileBuffer], fileName, { type: fileMimeType });
+        const upload = await pinata.upload.file(file);
+
+        res.status(200).send({ msg: 'File uploaded successfully', data: upload });
     } catch (error) {
         res.status(400).send({ msg: 'File upload failed', error: error.message });
     }
@@ -59,7 +54,7 @@ router.post("/api/storefile", (req, res) => {
     res.send("Hello World")
 });
 
-module.exports = router;
+export default router;
 
 /*
 getFiles

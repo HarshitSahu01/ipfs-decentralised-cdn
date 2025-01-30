@@ -3,7 +3,7 @@
       <div class="bg-white p-4 rounded shadow-md">
         <h2 class="text-xl font-bold mb-4">File Upload</h2>
         <form @submit.prevent="uploadFile" enctype="multipart/form-data" class="flex gap-4">
-          <input type="file" @change="handleFileChange" class="border p-2 rounded w-full" />
+          <input type="file" @change="handleFileChange" class="border p-2 rounded w-full" name="file"/>
           <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload</button>
         </form>
       </div>
@@ -38,40 +38,39 @@
   
   <script setup>
   import { ref } from 'vue';
-  
+  import axios from 'axios';
+
   const files = ref([
     { name: 'jquery.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
     { name: 'bootstrap.min.js', size: '234kB', status: 'Private', link: '#', editable: true },
     { name: 'vue.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
     { name: 'react.min.js', size: '234kB', status: 'Private', link: '#', editable: true }
   ]);
-  
+
   const selectedFile = ref(null);
-  
+
   const handleFileChange = (event) => {
     selectedFile.value = event.target.files[0];
   };
-  
+
   const uploadFile = async () => {
     if (!selectedFile.value) return;
     const formData = new FormData();
     formData.append('file', selectedFile.value);
     try {
-      await fetch('http://localhost:5000/api/testUpload', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await axios.post('http://localhost:5000/api/testUpload', formData);
       alert('File uploaded successfully');
+      console.log(response)
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const copyLink = (link) => {
     navigator.clipboard.writeText(link);
     alert('Link copied!');
   };
-  
+
   const editFile = (file) => {
     alert(`Editing ${file.name}`);
   };
