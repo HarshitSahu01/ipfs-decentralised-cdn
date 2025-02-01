@@ -3,7 +3,6 @@
         Your files
     </p>
 
-    <!-- Loading State: Show loading message/spinner if 'loading' is true -->
     <div v-if="loading" class="text-center text-xl font-semibold text-gray-700 mt-4">
         Loading...
     </div>
@@ -101,7 +100,7 @@ export default {
             selectedFile: ref(null),
             loginState: useLoginState(),
             files: ref([]),
-            loading: ref(false), // Loading state
+            loading: ref(false), 
         };
     },
 
@@ -114,10 +113,9 @@ export default {
             this.$router.push({ path: '/TestUploadPage' });
         },
 
-        // Show loading during upload
         async uploadFile() {
             if (this.selectedFile) {
-                this.loading = true; // Set loading to true
+                this.loading = true; 
                 const formData = new FormData();
                 formData.append('file', this.selectedFile);
                 try {
@@ -133,7 +131,7 @@ export default {
                 } catch (error) {
                     console.error('Error uploading file:', error);
                 } finally {
-                    this.loading = false; // Set loading to false when done
+                    this.loading = false;
                 }
             } else {
                 alert('No file selected!');
@@ -143,18 +141,18 @@ export default {
         updateFileName(event) {
             const file = event.target.files[0];
             if (file) {
-                this.selectedFile = file; // Store the selected file
-                this.uploadFieldFileName = file.name; // Store the filename
+                this.selectedFile = file; 
+                this.uploadFieldFileName = file.name; 
             } else {
                 this.uploadFieldFileName = "";
-                this.selectedFile = null; // Clear selected file
+                this.selectedFile = null; 
             }
             console.log('Selected file:', this.uploadFieldFileName);
         },
 
-        // Show loading during data fetch
+    
         getFiles() {
-            this.loading = true; // Set loading to true
+            this.loading = true; 
             axios.post('http://localhost:5000/api/getFiles', { credential: this.loginState.credential })
                 .then(response => {
                     this.files = response.data.data;
@@ -164,7 +162,7 @@ export default {
                     console.error('Error fetching files:', error);
                 })
                 .finally(() => {
-                    this.loading = false; // Set loading to false when done
+                    this.loading = false;
                 });
         },
     },
@@ -179,7 +177,6 @@ button {
     border: none;
     border-radius: 12px;
     color: #FFFFFF;
-    /* White text */
     background: linear-gradient(135deg, #f8bc6d, #FFECD4);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
