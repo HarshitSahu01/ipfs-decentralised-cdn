@@ -11,7 +11,7 @@
     <div v-else class="flow-root">
         <div class="flex items-center justify-center w-full md:w-64 mx-auto mb-2">
             <label for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                     <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -78,6 +78,11 @@
                     </td>
                 </tr>
             </tbody>
+        <tr v-if="files.length === 0">
+            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                No files uploaded yet
+            </td>
+        </tr>
         </table>
     </div>
 
