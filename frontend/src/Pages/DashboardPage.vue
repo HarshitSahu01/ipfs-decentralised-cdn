@@ -45,9 +45,6 @@
                         File Size
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
                         Get Link
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -66,9 +63,6 @@
                     </td>
                     <td class="px-6 py-4">
                         {{ file.size }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ file.status }}
                     </td>
                     <td class="px-6 py-4 text-blue-500 hover:cursor-pointer">
                         <a :href="`https://ipfs.io/ipfs/${ file.hash }`">Copy</a>
@@ -93,32 +87,6 @@ export default {
     name: 'DashboardPage',
     setup() {
         return {
-            files: [
-                {
-                    id: 1,
-                    name: 'jquery.min.js',
-                    size: '234kB',
-                    status: 'Public'
-                },
-                {
-                    id: 2,
-                    name: 'bootstrap.min.js',
-                    size: '234kB',
-                    status: 'Private'
-                },
-                {
-                    id: 3,
-                    name: 'vue.min.js',
-                    size: '234kB',
-                    status: 'Public'
-                },
-                {
-                    id: 4,
-                    name: 'react.min.js',
-                    size: '234kB',
-                    status: 'Private'
-                }
-            ],
             uploadFieldFileName: ref(""),
             selectedFile: ref(null),
             loginState: useLoginState(),
