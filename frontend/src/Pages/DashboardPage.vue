@@ -2,8 +2,13 @@
     <p class="text-2xl font-semibold text-gray-800 mx-8 pt-8 pb-4">
         Your files
     </p>
-    <div class="flow-root">
 
+    <!-- Loading State: Show loading message/spinner if 'loading' is true -->
+    <div v-if="loading" class="text-center text-xl font-semibold text-gray-700 mt-4">
+        Loading...
+    </div>
+
+    <div v-else class="flow-root">
         <div class="flex items-center justify-center w-full md:w-64 mx-auto mb-2">
             <label for="dropzone-file"
                 class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -31,6 +36,7 @@
             </button>
         </div>
     </div>
+
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg md:mx-8">
         <table class="w-full text-sm text-left rtl:text-right text-gray-700">
             <thead class="text-xs text-gray-700 uppercase bg-orange-100">
@@ -75,7 +81,6 @@
         </table>
     </div>
 
-
 </template>
 
 <script>
@@ -90,19 +95,24 @@ export default {
             uploadFieldFileName: ref(""),
             selectedFile: ref(null),
             loginState: useLoginState(),
-            files: ref([])
-        }
+            files: ref([]),
+            loading: ref(false), // Loading state
+        };
     },
 
     mounted() {
         this.getFiles();
     },
+
     methods: {
         redirectToUpload() {
             this.$router.push({ path: '/TestUploadPage' });
         },
+
+        // Show loading during upload
         async uploadFile() {
             if (this.selectedFile) {
+                this.loading = true; // Set loading to true
                 const formData = new FormData();
                 formData.append('file', this.selectedFile);
                 try {
@@ -114,14 +124,17 @@ export default {
                     });
 
                     alert('File uploaded successfully:', response.data);
+                    this.getFiles();
                 } catch (error) {
                     console.error('Error uploading file:', error);
+                } finally {
+                    this.loading = false; // Set loading to false when done
                 }
-                this.getFiles();
             } else {
                 alert('No file selected!');
             }
         },
+
         updateFileName(event) {
             const file = event.target.files[0];
             if (file) {
@@ -133,21 +146,24 @@ export default {
             }
             console.log('Selected file:', this.uploadFieldFileName);
         },
+
+        // Show loading during data fetch
         getFiles() {
-            // Fetch files from the server
-            axios.post('http://localhost:5000/api/getFiles', {credential: this.loginState.credential})
+            this.loading = true; // Set loading to true
+            axios.post('http://localhost:5000/api/getFiles', { credential: this.loginState.credential })
                 .then(response => {
                     this.files = response.data.data;
-                    // console.log(response.data);
+                    console.log(response.data);
                 })
                 .catch(error => {
                     console.error('Error fetching files:', error);
+                })
+                .finally(() => {
+                    this.loading = false; // Set loading to false when done
                 });
         },
-    }
+    },
 };
-
-
 </script>
 
 <style scoped>
@@ -164,7 +180,6 @@ button {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
-
 
 button:hover {
     transform: scale(1.1);
