@@ -6,7 +6,7 @@
 
         <div class="flex items-center justify-center w-full md:w-64 mx-auto mb-2">
             <label for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                     <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -71,7 +71,7 @@
                         {{ file.status }}
                     </td>
                     <td class="px-6 py-4 text-blue-500 hover:cursor-pointer">
-                        Copy
+                        <a :href="`https://ipfs.io/ipfs/${ file.hash }`">Copy</a>
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
@@ -87,6 +87,7 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useLoginState } from '../stores/loginStateStore';
 
 export default {
     name: 'DashboardPage',
@@ -119,31 +120,38 @@ export default {
                 }
             ],
             uploadFieldFileName: ref(""),
-            selectedFile: ref(null)
+            selectedFile: ref(null),
+            loginState: useLoginState(),
+            files: ref([])
         }
+    },
+
+    mounted() {
+        this.getFiles();
     },
     methods: {
         redirectToUpload() {
             this.$router.push({ path: '/TestUploadPage' });
         },
-        async uploadFile(){
-            if(this.selectedFile){
+        async uploadFile() {
+            if (this.selectedFile) {
                 const formData = new FormData();
                 formData.append('file', this.selectedFile);
                 try {
-                    const response = await axios.post('http://localhost:5000/api/testupload', formData, {
+                    formData.append('credential', this.loginState.credential);
+                    const response = await axios.post('http://localhost:5000/api/uploadFile', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
 
-                    
-                    console.log('File uploaded successfully:', response.data);
+                    alert('File uploaded successfully:', response.data);
                 } catch (error) {
                     console.error('Error uploading file:', error);
                 }
+                this.getFiles();
             } else {
-                console.log('No file selected!');
+                alert('No file selected!');
             }
         },
         updateFileName(event) {
@@ -156,9 +164,22 @@ export default {
                 this.selectedFile = null; // Clear selected file
             }
             console.log('Selected file:', this.uploadFieldFileName);
-        }
+        },
+        getFiles() {
+            // Fetch files from the server
+            axios.post('http://localhost:5000/api/getFiles', {credential: this.loginState.credential})
+                .then(response => {
+                    this.files = response.data.data;
+                    // console.log(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching files:', error);
+                });
+        },
     }
 };
+
+
 </script>
 
 <style scoped>

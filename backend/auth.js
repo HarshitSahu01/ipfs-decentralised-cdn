@@ -11,13 +11,14 @@ const auth = getAuth()
 
 export const verifyGoogleToken = async (req, res) => {
   const { credential } = req.body;
+  // console.log(credential);
 
   try {
     const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
     const data = await response.json();
 
     if (data.error) {
-      throw new Error('Invalid token');
+      throw new Error('Invalid token' + data.error_description);
     }
 
     const clientId = process.env.OAUTH_CLIENT_ID;
