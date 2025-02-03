@@ -129,29 +129,25 @@ router.post("/api/deleteFile", async (req, res) => {
             res.status(400).send("No such file exists.");
             return;
         }
-
         const fileData = doc.data();
-        const userRef = db.collection("users").doc(firebaseUser.UID);
+        const userRef = db.collection("users").doc(firebaseUser.uid);
 
         const userDoc = await userRef.get();
         if (!userDoc.exists) {
             res.status(400).send("User does not exist.");
             return;
         }
-
         await userRef.update({
             files: admin.firestore.FieldValue.arrayRemove(fileRefParam),
         });
-
         if (fileData.refCount > 1) {
             await fileRef.update({
                 refCount: admin.firestore.FieldValue.increment(-1),
             });
         } else {
-            await pinata.unpin(fileData.hash);
+            pinata.unpin(fileData.hash);
             await fileRef.delete();
         }
-
         res.status(200).send({ msg: 'File deleted successfully' });
     } catch (error) {
         res.status(400).send({ msg: 'Error in deleting', error: error.message });

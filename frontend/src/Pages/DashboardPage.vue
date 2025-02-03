@@ -58,10 +58,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="odd:bg-white even:bg-orange-50 border-b border-gray-200" v-for="file in files"
-                    :key="file.id">
+                <tr class="odd:bg-white even:bg-orange-50 border-b border-gray-200" v-for="(file, index) in files"
+                    :key="index">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {{ file.id }}
+                        {{ index + 1 }}
                     </th>
                     <td class="px-6 py-4">
                         {{ file.name }}
@@ -73,7 +73,7 @@
                         <a :href="`https://ipfs.io/ipfs/${file.hash}`">Copy</a>
                     </td>
                     <td class="px-6 py-4">
-                        <button @click="deleteFile(file.id)">Delete</button>
+                        <button @click="deleteFile(file.hash)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -91,7 +91,9 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useLoginState } from '../stores/loginStateStore';
-import { configStore } from '../stores/configstore';
+import { configStore } from '../stores/configStore';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
     name: 'DashboardPage',
@@ -134,15 +136,16 @@ export default {
                         }
                     });
 
-                    alert('File uploaded successfully:', response.data);
+                    toast.success('File uploaded successfully!');
                     this.getFiles();
                 } catch (error) {
                     console.error('Error uploading file:', error);
+                    toast.error('Error uploading file: '+ error)
                 } finally {
                     this.loading = false;
                 }
             } else {
-                alert('No file selected!');
+                toast.error('First selecct a file!')
             }
         },
 
@@ -164,7 +167,7 @@ export default {
             axios.post(`${this.backendURL}/api/getFiles`, { credential: this.loginState.credential })
                 .then(response => {
                     this.files = response.data.data;
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
                 .catch(error => {
                     console.error('Error fetching files:', error);
@@ -176,30 +179,24 @@ export default {
 
         async deleteFile(fileRefParam) {
             if (!fileRefParam) {
-                alert('File reference parameter is missing!');
+                toast.error('File reference parameter is missing!');
                 return;
             }
 
             this.loading = true;
-            try {
-                const response = await axios.post(`${backendURL}/api/deleteFile`,
-                    { fileRefParam },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${this.loginState.credential}`
-                        }
-                    }
-                );
-
-                alert('File deleted successfully:', response.data);
-                this.getFiles();
-            } catch (error) {
-                console.error('Error deleting file:', error);
-                alert('Error deleting file');
-            } finally {
-                this.loading = false;
-            }
+            axios.post(`${this.backendURL}/api/deleteFile`, { fileRefParam, credential: this.loginState.credential })
+                .then(response => {
+                    console.log('aa to raha hai b*****')
+                    toast.success('File deleted successfully:', response.data);
+                    this.getFiles();
+                })
+                .catch(error => {
+                    console.error('Error deleting file:', error);
+                    toast.error('Error deleting file');
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         }
     },
 };

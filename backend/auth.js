@@ -23,6 +23,7 @@ export const verifyGoogleToken = async (req, res) => {
 
     const clientId = process.env.OAUTH_CLIENT_ID;
     if (data.aud !== clientId) {
+      console.log(data.aud, clientId)
       throw new Error('Token audience mismatch');
     }
 
