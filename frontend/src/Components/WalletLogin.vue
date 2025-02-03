@@ -3,7 +3,7 @@ import { useLoginState } from '../stores/loginStateStore';
 import axios from 'axios';
 import { decodeCredential } from 'vue3-google-login';
 import { useRouter } from 'vue-router';
-import { configStore } from '../stores/configstore';
+import { configStore } from '../stores/configStore';
 
 // const router = useRouter();
 
