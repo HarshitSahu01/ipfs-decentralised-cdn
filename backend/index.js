@@ -10,7 +10,7 @@ import fileManagerRoutes from "./fileManager.js";
 
 dotenv.config();
 const app = express();
-app.use(cors({credentials: true, origin: 'http://localhost:5173'}));
+app.use(cors({credentials: true, origin: ['http://localhost:5173', 'https://ipfs-decentralised-cdn.vercel.app']}));
 app.use(express.json());
 
 app.use('/', authRoutes);
