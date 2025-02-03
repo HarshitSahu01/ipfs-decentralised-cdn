@@ -16,9 +16,11 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-  },build: {
+  },
+  build: {
     rollupOptions: {
       external: ['vue3-toastify'],
     },
+  }
   
 })
