@@ -8,7 +8,7 @@ export const configStore = defineStore('configStore',{
     actions:{
         backendURL(){
             if(location.hostname === 'localhost')
-                return 'http://localhost:5000'
+                return 'https://express-backend-2b4s.onrender.com'
             return this.renderURL
         }
     }
