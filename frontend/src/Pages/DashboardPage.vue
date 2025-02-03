@@ -50,7 +50,10 @@
                         File Size
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Get Link
+                        Open file
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Copy link
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Delete
@@ -67,10 +70,13 @@
                         {{ file.name }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ file.size }}
+                        {{ file.size }}B
                     </td>
                     <td class="px-6 py-4 text-blue-500 hover:cursor-pointer">
-                        <a :href="`https://ipfs.io/ipfs/${file.hash}`">Copy</a>
+                        <a :href="`https://ipfs.io/ipfs/${file.hash}`">Open</a>
+                    </td>
+                    <td class="px-6 py-4 text-blue-500 hover:cursor-pointer special">
+                        <button @click="clipboard(`https://ipfs.io/ipfs/${file.hash}`)">Copy link</button>
                     </td>
                     <td class="px-6 py-4">
                         <button @click="deleteFile(file.hash)">Delete</button>
@@ -93,7 +99,7 @@ import axios from 'axios';
 import { useLoginState } from '../stores/loginStateStore';
 import { configStore } from '../stores/configStore';
 import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import '../assets/vue3-toastify.css';
 
 export default {
     name: 'DashboardPage',
@@ -121,6 +127,13 @@ export default {
     methods: {
         redirectToUpload() {
             this.$router.push({ path: '/TestUploadPage' });
+        },
+        clipboard(link){
+            navigator.clipboard.writeText(link).then(() => {
+                toast.success('Link copied to clipboard!');
+            }).catch(() => {
+                toast.error('Error copying link to clipboard!');
+            });
         },
 
         async uploadFile() {
@@ -187,7 +200,7 @@ export default {
             axios.post(`${this.backendURL}/api/deleteFile`, { fileRefParam, credential: this.loginState.credential })
                 .then(response => {
                     console.log('aa to raha hai b*****')
-                    toast.success('File deleted successfully:', response.data);
+                    toast.success('File deleted successfully ', response.data);
                     this.getFiles();
                 })
                 .catch(error => {

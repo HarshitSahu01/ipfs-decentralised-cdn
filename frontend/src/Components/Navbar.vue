@@ -11,7 +11,9 @@
     <!-- Navigation Links -->
     <div class="flex items-center space-x-4">
       <template v-if="this.loginState.isLoggedIn">
-      {{ this.loginState.displayName }}
+      <span class="px-2">
+        {{ this.loginState.displayName }}
+      </span>
         <RouterLink to="/dashboard" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Dashboard
         </RouterLink>
         <button @click="logout" class="px-4 py-2 text-gray-600 border rounded-md hover:text-gray-900">Logout</button>
