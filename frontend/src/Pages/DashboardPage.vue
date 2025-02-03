@@ -70,18 +70,18 @@
                         {{ file.size }}
                     </td>
                     <td class="px-6 py-4 text-blue-500 hover:cursor-pointer">
-                        <a :href="`https://ipfs.io/ipfs/${ file.hash }`">Copy</a>
+                        <a :href="`https://ipfs.io/ipfs/${file.hash}`">Copy</a>
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
+                        <button @click="deleteFile(file.id)">Delete</button>
                     </td>
                 </tr>
             </tbody>
-        <tr v-if="files.length === 0">
-            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                No files uploaded yet
-            </td>
-        </tr>
+            <tr v-if="files.length === 0">
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                    No files uploaded yet
+                </td>
+            </tr>
         </table>
     </div>
 
@@ -91,6 +91,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useLoginState } from '../stores/loginStateStore';
+import { configStore } from '../stores/configstore';
 
 export default {
     name: 'DashboardPage',
@@ -100,12 +101,19 @@ export default {
             selectedFile: ref(null),
             loginState: useLoginState(),
             files: ref([]),
-            loading: ref(false), 
+            loading: ref(false),
+            configState: configStore()
         };
     },
 
     mounted() {
         this.getFiles();
+    },
+
+    computed: {
+        backendURL() {
+            return this.configState.backendURL();
+        }
     },
 
     methods: {
@@ -115,12 +123,12 @@ export default {
 
         async uploadFile() {
             if (this.selectedFile) {
-                this.loading = true; 
+                this.loading = true;
                 const formData = new FormData();
                 formData.append('file', this.selectedFile);
                 try {
                     formData.append('credential', this.loginState.credential);
-                    const response = await axios.post('http://localhost:5000/api/uploadFile', formData, {
+                    const response = await axios.post(`${this.backendURL}/api/uploadFile`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -141,19 +149,19 @@ export default {
         updateFileName(event) {
             const file = event.target.files[0];
             if (file) {
-                this.selectedFile = file; 
-                this.uploadFieldFileName = file.name; 
+                this.selectedFile = file;
+                this.uploadFieldFileName = file.name;
             } else {
                 this.uploadFieldFileName = "";
-                this.selectedFile = null; 
+                this.selectedFile = null;
             }
             console.log('Selected file:', this.uploadFieldFileName);
         },
 
-    
+
         getFiles() {
-            this.loading = true; 
-            axios.post('http://localhost:5000/api/getFiles', { credential: this.loginState.credential })
+            this.loading = true;
+            axios.post(`${this.backendURL}/api/getFiles`, { credential: this.loginState.credential })
                 .then(response => {
                     this.files = response.data.data;
                     console.log(response.data);
@@ -165,6 +173,34 @@ export default {
                     this.loading = false;
                 });
         },
+
+        async deleteFile(fileRefParam) {
+            if (!fileRefParam) {
+                alert('File reference parameter is missing!');
+                return;
+            }
+
+            this.loading = true;
+            try {
+                const response = await axios.post(`${backendURL}/api/deleteFile`,
+                    { fileRefParam },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.loginState.credential}`
+                        }
+                    }
+                );
+
+                alert('File deleted successfully:', response.data);
+                this.getFiles();
+            } catch (error) {
+                console.error('Error deleting file:', error);
+                alert('Error deleting file');
+            } finally {
+                this.loading = false;
+            }
+        }
     },
 };
 </script>

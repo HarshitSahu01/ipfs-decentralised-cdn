@@ -3,6 +3,7 @@ import { useLoginState } from '../stores/loginStateStore';
 import axios from 'axios';
 import { decodeCredential } from 'vue3-google-login';
 import { useRouter } from 'vue-router';
+import { configStore } from '../stores/configstore';
 
 // const router = useRouter();
 
@@ -10,20 +11,24 @@ export default {
   data() {
     return {
       loginState: useLoginState(),
-      router: useRouter()
+      router: useRouter(),
+      configState: configStore()
     };
   },
   computed: {
     isLoggedIn() {
       return this.loginState.isLoggedIn;
     },
+    backendURL() {
+      return this.configState.backendURL();
+    }
   },
   methods: {
     callback(response) {
       const userData = decodeCredential(response.credential);
       // console.log(userData);
 
-      axios.post('http://localhost:5000/api/login', {
+      axios.post(`${this.backendURL}/api/login`, {
           credential: response.credential,
         })
         .then((response) => response.data)
@@ -35,7 +40,7 @@ export default {
     },
     test() {
       axios
-        .get('http://localhost:5000')
+        .get(`${this.backendURL}`)
         .then((response) => {
           console.log(response.data);
         })

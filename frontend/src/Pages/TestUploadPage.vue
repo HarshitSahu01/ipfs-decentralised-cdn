@@ -40,6 +40,7 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import { useLoginState } from '../stores/loginStateStore';
+  import { configStore } from '../stores/configstore';
 
   const files = ref([
     { name: 'jquery.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
@@ -49,6 +50,12 @@
   ]);
 
   const loginState = useLoginState()
+
+  const configState = configStore()
+
+  function backendURL() {
+    return configState.backendURL()
+  }
 
   const selectedFile = ref(null);
 
@@ -61,7 +68,7 @@
     const formData = new FormData();
     formData.append('file', selectedFile.value);
     try {
-      const response = await axios.post('http://localhost:5000/api/testUpload', {
+      const response = await axios.post(`${backendURL}/api/testUpload`, {
         formData,
         credential: loginState.credential
       });

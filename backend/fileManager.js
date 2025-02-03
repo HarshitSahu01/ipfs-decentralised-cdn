@@ -86,7 +86,7 @@ router.post("/api/uploadFile", upload.single('file'), async (req, res) => {
             await fileRef.set({
                 name: file.name,
                 size: file.size,
-                type: file.mimetype || '', 
+                type: file.mimetype || '',
                 hash: upload.IpfsHash,
                 pinsize: upload.PinSize,
                 timestamp: new Date().toISOString(),
@@ -102,7 +102,6 @@ router.post("/api/uploadFile", upload.single('file'), async (req, res) => {
     } catch (error) {
         throw error;
         res.status(400).send({ msg: 'File upload failed', error: error.message });
-
     }
 });
 
