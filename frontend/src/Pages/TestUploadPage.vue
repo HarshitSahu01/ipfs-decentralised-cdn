@@ -40,7 +40,7 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import { useLoginState } from '../stores/loginStateStore';
-  import { configStore } from '../stores/configstore';
+  import { configStore } from '../stores/configStore';
 
   const files = ref([
     { name: 'jquery.min.js', size: '234kB', status: 'Public', link: '#', editable: true },
