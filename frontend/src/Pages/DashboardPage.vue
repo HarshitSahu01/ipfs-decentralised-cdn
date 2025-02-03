@@ -143,7 +143,7 @@ export default {
                 formData.append('file', this.selectedFile);
                 try {
                     formData.append('credential', this.loginState.credential);
-                    const response = await axios.post(`${this.backendURL}/api/uploadFile`, formData, {
+                    const response = await axios.post(`https://express-backend-2b4s.onrender.com/api/uploadFile`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -177,7 +177,7 @@ export default {
 
         getFiles() {
             this.loading = true;
-            axios.post(`${this.backendURL}/api/getFiles`, { credential: this.loginState.credential })
+            axios.post(`https://express-backend-2b4s.onrender.com/api/getFiles`, { credential: this.loginState.credential })
                 .then(response => {
                     this.files = response.data.data;
                     // console.log(response.data);
@@ -197,9 +197,8 @@ export default {
             }
 
             this.loading = true;
-            axios.post(`${this.backendURL}/api/deleteFile`, { fileRefParam, credential: this.loginState.credential })
+            axios.post(`https://express-backend-2b4s.onrender.com/api/deleteFile`, { fileRefParam, credential: this.loginState.credential })
                 .then(response => {
-                    console.log('aa to raha hai b*****')
                     toast.success('File deleted successfully ', response.data);
                     this.getFiles();
                 })
