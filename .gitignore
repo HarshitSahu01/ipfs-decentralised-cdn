@@ -3,3 +3,4 @@ rough
 
 .env
 .env*
+/backend/.env
